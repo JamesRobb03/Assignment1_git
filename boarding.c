@@ -15,6 +15,8 @@ int main()
 	printf("Initialisation output: %d\n", rVal);
 	rVal = addPassenger(myBQ, "James", 9876, 12);
 	printf("Add Passenger output: %d\n", rVal);
+	rVal = addPriorityPassenger(myBQ,"Priority", 1111, 1);
+	printf("Add Priority Passenger output: %d\n", rVal);
 
 	return 0;
 }
@@ -83,6 +85,42 @@ int addPassenger(BoardingQueue *qPtr, char name[], double passportNumber, int se
 
 	qPtr->tail->next = newPassenger;
 	qPtr->tail = newPassenger;
+
+	return SUCCESS;
+}
+
+int addPriorityPassenger(BoardingQueue *qPtr, char name[], double passportNumber, int seatNumber)
+{
+	//checking to see if pointer is pointing to valid queue
+	if (qPtr == NULL)
+	{
+		return INVALID_INPUT_PARAMETER;
+	}
+
+	//creates a passenger to add to queue
+	Passenger *newPriority = (Passenger*)myMalloc(sizeof(Passenger));
+
+	//check to see wether memory has been succesfully allocated
+	if (newPriority == NULL)
+	{
+		return MEMORY_ALLOCATION_ERROR;
+	}
+
+	//initialise fields
+	strcpy(newPriority->name, name);
+	newPriority->passportNumber = passportNumber;
+	newPriority->seatNumber = seatNumber;
+	//set priorities next to head of queue
+	newPriority->next = qPtr->head;
+
+	//check to see if queue is empty
+	if (qPtr->head == NULL && qPtr->tail == NULL)
+	{
+		qPtr->head = newPriority;
+		qPtr->tail = newPriority;
+	}
+
+	qPtr->head = newPriority;
 
 	return SUCCESS;
 }
