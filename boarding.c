@@ -1,15 +1,20 @@
 #include "boarding.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
+//TODO - ADD INPUT VALIDATION FOR FIELDS.
 
 int main()
 {
 	int rVal = 0;
 	BoardingQueue *myBQ = NULL;
 
+	//testing
 	rVal = createBoardingQueue(&myBQ);
 	printf("Initialisation output: %d\n", rVal);
+	rVal = addPassenger(myBQ, "James", 9876, 12);
+	printf("Add Passenger output: %d\n", rVal);
 
 	return 0;
 }
@@ -40,6 +45,44 @@ int createBoardingQueue(BoardingQueue **qPtr)
 	/*Setting values for queue*/
 	(*qPtr)->head = NULL;
 	(*qPtr)->tail = NULL;
+
+	return SUCCESS;
+}
+
+
+/* Add a new Passenger to the END / tail of the boarding queue using the values provided */
+int addPassenger(BoardingQueue *qPtr, char name[], double passportNumber, int seatNumber)
+{
+	//checking to see if pointer is pointing to valid queue
+	if(qPtr == NULL)
+	{
+		return INVALID_INPUT_PARAMETER;
+	}
+	//creates a passenger to add to the queue
+	Passenger *newPassenger = (Passenger*)myMalloc(sizeof(Passenger));
+
+	//check to see whether memory has been succesfully allocated
+	if (newPassenger == NULL)
+	{
+		return MEMORY_ALLOCATION_ERROR;
+	}
+
+	//initialise fields
+	strcpy(newPassenger->name, name);
+	newPassenger->passportNumber = passportNumber;
+	newPassenger->seatNumber = seatNumber;
+	//passengers next should initially be null
+	newPassenger->next = NULL;
+
+	//check to see if boardingqueue is empty
+	if (qPtr->head == NULL && qPtr->tail == NULL)
+	{
+		qPtr->head = newPassenger;
+		qPtr->tail = newPassenger;
+	}
+
+	qPtr->tail->next = newPassenger;
+	qPtr->tail = newPassenger;
 
 	return SUCCESS;
 }
