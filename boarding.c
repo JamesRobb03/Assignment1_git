@@ -9,6 +9,7 @@ int main()
 {
 	int rVal = 0;
 	BoardingQueue *myBQ = NULL;
+	Passenger proccessedP;
 
 	//testing
 	rVal = createBoardingQueue(&myBQ);
@@ -17,6 +18,8 @@ int main()
 	printf("Add Passenger output: %d\n", rVal);
 	rVal = addPriorityPassenger(myBQ,"Priority", 1111, 1);
 	printf("Add Priority Passenger output: %d\n", rVal);
+	rVal = removePassenger(myBQ, &proccessedP);
+	printf("Remove Passenger output: %d\n", rVal);
 
 	return 0;
 }
@@ -121,6 +124,46 @@ int addPriorityPassenger(BoardingQueue *qPtr, char name[], double passportNumber
 	}
 
 	qPtr->head = newPriority;
+
+	return SUCCESS;
+}
+
+/*function to remove passenger from queue*/
+int removePassenger(BoardingQueue *qPtr, Passenger *p)
+{
+	//check if queue is valid
+	if (qPtr == NULL)
+	{
+		return INVALID_INPUT_PARAMETER;
+	}
+
+	//checking to see if memory address of p is valid
+	if (p == NULL)
+	{
+		return INVALID_INPUT_PARAMETER;
+	}
+
+	//checking to see if queue is empty
+	if (qPtr->head == NULL)
+	{
+		return INVALID_QUEUE_OPERATION;
+	}
+
+	//store passenger thats at the head of the queue
+	p = qPtr->head;
+
+	//create temp pointer to person at head of stack
+	Passenger *pToRemove = qPtr->head;
+
+	//change head of queue to be next person in queue
+	qPtr->head = qPtr->head->next;
+
+	//remove / free existing top
+	pToRemove->next = NULL;
+	pToRemove->seatNumber=0;
+	pToRemove->passportNumber=0;
+	strcpy(pToRemove->name, "");
+	free(pToRemove);
 
 	return SUCCESS;
 }
