@@ -1,3 +1,9 @@
+/*
+ Name: James Robb
+ Matric number: 180010640
+ Module code: AC21008
+*/
+
 #include "boarding.h"
 #include <stdlib.h>
 #include <stdio.h>
@@ -187,6 +193,7 @@ int peekAtHeadPassenger(BoardingQueue *qPtr, Passenger *p)
 		return INVALID_QUEUE_OPERATION;
 	}
 
+	//copying the passenger at the head of the queue into the passenger p
 	strcpy(p->name, qPtr->head->name);
 	p->passportNumber = qPtr->head->passportNumber;
 	p->seatNumber = qPtr->head->seatNumber;
@@ -216,6 +223,7 @@ int peekAtTailPassenger(BoardingQueue *qPtr, Passenger *p)
 		return INVALID_QUEUE_OPERATION;
 	}
 
+	//copying the passenger at the tail of the queue into the passenger p
 	strcpy(p->name, qPtr->tail->name);
 	p->passportNumber = qPtr->tail->passportNumber;
 	p->seatNumber = qPtr->tail->seatNumber;
