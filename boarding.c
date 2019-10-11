@@ -11,6 +11,33 @@
 
 //TODO - ADD INPUT VALIDATION FOR FIELDS.
 
+//Function to display queue. Used in testing when i wanted to see all passengers currently in the queue
+//Altered from the lab 3 answers.
+int displayQ(BoardingQueue *pQ)
+{
+	// if there is no stack to traverse
+	if (pQ == NULL)
+		return INVALID_INPUT_PARAMETER;
+
+	// if the stack is empty
+	if (pQ->head == NULL)
+		return INVALID_QUEUE_OPERATION;
+
+	// traverse the entire Stack, from top to bottom
+	Passenger *nextNodeToDisplay = pQ->head;
+	while (nextNodeToDisplay != NULL)
+	{
+		// display node
+		printf("Next passenger in Queue: %s\n", nextNodeToDisplay->name);
+
+		// move to next node down the stack
+		nextNodeToDisplay = nextNodeToDisplay->next;
+	}
+
+	// done
+	return SUCCESS;
+}
+
 
 /* Create a new, empty boarding queue, storing a pointer to it in the variable 
    provided (e.g. qPtr) */
@@ -80,10 +107,14 @@ int addPassenger(BoardingQueue *qPtr, char name[], double passportNumber, int se
 	{
 		qPtr->head = newPassenger;
 		qPtr->tail = newPassenger;
+	}else
+	{
+		qPtr->tail->next = newPassenger;
+		qPtr->tail = newPassenger;
 	}
 
-	qPtr->tail->next = newPassenger;
-	qPtr->tail = newPassenger;
+	//
+	
 
 	return SUCCESS;
 }
@@ -123,7 +154,7 @@ int addPriorityPassenger(BoardingQueue *qPtr, char name[], double passportNumber
 		qPtr->head = newPriority;
 		qPtr->tail = newPriority;
 	}
-
+	
 	qPtr->head = newPriority;
 
 	return SUCCESS;
@@ -247,7 +278,6 @@ int clearBoardingQueue(BoardingQueue *qPtr)
 		//get pointer to current head of queue
 		Passenger *currentHead = qPtr->head;
 
-		//printf("%d\n", currentHead->seatNumber);
 		//move head to next passenger down
 		qPtr->head = qPtr->head->next;
 
@@ -257,10 +287,9 @@ int clearBoardingQueue(BoardingQueue *qPtr)
 		currentHead->passportNumber=0;
 		strcpy(currentHead->name, "");
 
-		//free(currentHead);
+		free(currentHead);
 	}
 
-	qPtr->tail = NULL;
 
 	free(qPtr);
 
