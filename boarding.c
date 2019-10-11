@@ -5,25 +5,7 @@
 
 //TODO - ADD INPUT VALIDATION FOR FIELDS.
 
-//testing main method
-int main()
-{
-	int rVal = 0;
-	BoardingQueue *myBQ = NULL;
-	Passenger proccessedP;
 
-	//testing
-	rVal = createBoardingQueue(&myBQ);
-	printf("Initialisation output: %d\n", rVal);
-	rVal = addPassenger(myBQ, "James", 9876, 12);
-	printf("Add Passenger output: %d\n", rVal);
-	rVal = addPriorityPassenger(myBQ,"Priority", 1111, 1);
-	printf("Add Priority Passenger output: %d\n", rVal);
-	rVal = removePassenger(myBQ, &proccessedP);
-	printf("Remove Passenger output: %d\n", rVal);
-
-	return 0;
-}
 /* Create a new, empty boarding queue, storing a pointer to it in the variable 
    provided (e.g. qPtr) */
 int createBoardingQueue(BoardingQueue **qPtr)
@@ -59,6 +41,7 @@ int createBoardingQueue(BoardingQueue **qPtr)
 /* Add a new Passenger to the END / tail of the boarding queue using the values provided */
 int addPassenger(BoardingQueue *qPtr, char name[], double passportNumber, int seatNumber)
 {
+	
 	//checking to see if pointer is pointing to valid queue
 	if(qPtr == NULL)
 	{
@@ -71,6 +54,12 @@ int addPassenger(BoardingQueue *qPtr, char name[], double passportNumber, int se
 	if (newPassenger == NULL)
 	{
 		return MEMORY_ALLOCATION_ERROR;
+	}
+
+	//checks to see if inputs are valid
+	if (name == NULL || passportNumber <1 || seatNumber <1)
+	{
+		return INVALID_INPUT_PARAMETER;
 	}
 
 	//initialise fields
@@ -97,6 +86,11 @@ int addPriorityPassenger(BoardingQueue *qPtr, char name[], double passportNumber
 {
 	//checking to see if pointer is pointing to valid queue
 	if (qPtr == NULL)
+	{
+		return INVALID_INPUT_PARAMETER;
+	}
+
+	if (name == NULL || passportNumber <1 || seatNumber <1)
 	{
 		return INVALID_INPUT_PARAMETER;
 	}
@@ -151,7 +145,10 @@ int removePassenger(BoardingQueue *qPtr, Passenger *p)
 	}
 
 	//store passenger thats at the head of the queue
-	p = qPtr->head;
+	strcpy(p->name, qPtr->head->name);
+	p->passportNumber = qPtr->head->passportNumber;
+	p->seatNumber = qPtr->head->seatNumber;
+	p->next = qPtr->head->next;
 
 	//create temp pointer to person at head of stack
 	Passenger *pToRemove = qPtr->head;
@@ -169,10 +166,95 @@ int removePassenger(BoardingQueue *qPtr, Passenger *p)
 	return SUCCESS;
 }
 
-//FOR TESTING PURPOSES
-/* A function (and global) that can trigger malloc fails on demand. */
-int mallocFail = 0;
-void* myMalloc(size_t size) {
-	if (mallocFail) { return NULL; }
-	else { return malloc(size); }
+//function to look at the Passenger at the head of the queue
+int peekAtHeadPassenger(BoardingQueue *qPtr, Passenger *p)
+{
+	//check to see if qPtr is pointing to a valid queue
+	if (qPtr == NULL)
+	{
+		return INVALID_INPUT_PARAMETER;
+	}
+
+	//checking to see that the pointer storing the Person isnt null
+	if (p == NULL)
+	{
+		return INVALID_INPUT_PARAMETER;
+	}
+
+	//checking that queue isnt empty
+	if (qPtr->head == NULL)
+	{
+		return INVALID_QUEUE_OPERATION;
+	}
+
+	strcpy(p->name, qPtr->head->name);
+	p->passportNumber = qPtr->head->passportNumber;
+	p->seatNumber = qPtr->head->seatNumber;
+	p->next = qPtr->head->next;
+
+	return SUCCESS;
+}
+
+//function to look at the passenger at the tail of the queue
+int peekAtTailPassenger(BoardingQueue *qPtr, Passenger *p)
+{
+	//check to see if qPtr is pointing to a valid queue
+	if (qPtr == NULL)
+	{
+		return INVALID_INPUT_PARAMETER;
+	}
+
+	//checking to see that the pointer storing the Person isnt null
+	if (p == NULL)
+	{
+		return INVALID_INPUT_PARAMETER;
+	}
+
+	//checking that queue isnt empty
+	if (qPtr->tail == NULL)
+	{
+		return INVALID_QUEUE_OPERATION;
+	}
+
+	strcpy(p->name, qPtr->tail->name);
+	p->passportNumber = qPtr->tail->passportNumber;
+	p->seatNumber = qPtr->tail->seatNumber;
+	p->next = qPtr->tail->next;
+
+	return SUCCESS;	
+}
+
+/* Empty the boarding queue, freeing up any memory that it is currently using */
+int clearBoardingQueue(BoardingQueue *qPtr)
+{
+	//checking to see if pointer is pointing to valid queue
+	if (qPtr == NULL)
+	{
+		return INVALID_INPUT_PARAMETER;
+	}
+
+	//loops to see if there is still passengers in the queue to free
+	while(qPtr->head != NULL)
+	{
+		//get pointer to current head of queue
+		Passenger *currentHead = qPtr->head;
+
+		//printf("%d\n", currentHead->seatNumber);
+		//move head to next passenger down
+		qPtr->head = qPtr->head->next;
+
+		//free the current head
+		currentHead->next = NULL;
+		currentHead->seatNumber=0;
+		currentHead->passportNumber=0;
+		strcpy(currentHead->name, "");
+
+		//free(currentHead);
+	}
+
+	qPtr->tail = NULL;
+
+	free(qPtr);
+
+	return SUCCESS;
 }
