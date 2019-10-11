@@ -15,12 +15,18 @@ int main()
 	//testing
 	rVal = createBoardingQueue(&myBQ);
 	printf("Initialisation output: %d\n", rVal);
-	rVal = addPassenger(myBQ, "James", 9876, 12);
+	rVal = addPassenger(myBQ, "head", 9876, 12);
 	printf("Add Passenger output: %d\n", rVal);
 	rVal = addPriorityPassenger(myBQ,"Priority", 1111, 1);
 	printf("Add Priority Passenger output: %d\n", rVal);
 	rVal = removePassenger(myBQ, &proccessedP);
 	printf("Remove Passenger output: %d\n", rVal);
+	rVal = addPassenger(myBQ, "tail", 9876, 12);
+	rVal = peekAtHeadPassenger(myBQ, &proccessedP);
+	printf("Peak at head output: %d \n", rVal);
+	rVal = peekAtTailPassenger(myBQ, &proccessedP);
+	printf("Peak at tail output: %d \n", rVal);
+
 
 	return 0;
 }
@@ -169,6 +175,81 @@ int removePassenger(BoardingQueue *qPtr, Passenger *p)
 	return SUCCESS;
 }
 
+//function to look at the Passenger at the head of the queue
+int peekAtHeadPassenger(BoardingQueue *qPtr, Passenger *p)
+{
+	//check to see if qPtr is pointing to a valid queue
+	if (qPtr == NULL)
+	{
+		return INVALID_INPUT_PARAMETER;
+	}
+
+	//checking to see that the pointer storing the Person isnt null
+	if (p == NULL)
+	{
+		return INVALID_INPUT_PARAMETER;
+	}
+
+	//checking that queue isnt empty
+	if (qPtr->head == NULL)
+	{
+		return INVALID_QUEUE_OPERATION;
+	}
+
+	p = qPtr->head;
+
+	return SUCCESS;
+}
+
+//function to look at the passenger at the tail of the queue
+int peekAtTailPassenger(BoardingQueue *qPtr, Passenger *p)
+{
+	//check to see if qPtr is pointing to a valid queue
+	if (qPtr == NULL)
+	{
+		return INVALID_INPUT_PARAMETER;
+	}
+
+	//checking to see that the pointer storing the Person isnt null
+	if (p == NULL)
+	{
+		return INVALID_INPUT_PARAMETER;
+	}
+
+	//checking that queue isnt empty
+	if (qPtr->tail == NULL)
+	{
+		return INVALID_QUEUE_OPERATION;
+	}
+
+	p = qPtr->tail;
+
+	return SUCCESS;	
+}
+
+/* Empty the boarding queue, freeing up any memory that it is currently using */
+int clearBoardingQueue(BoardingQueue *qPtr)
+{
+	//checking to see if pointer is pointing to valid queue
+	if (qPtr == NULL)
+	{
+		return INVALID_INPUT_PARAMETER;
+	}
+
+	//loops to see if there is still passengers in the queue to free
+	while(qPtr->head != NULL)
+	{
+		//get pointer to current head of stack
+		Passenger *currentHead = qPtr->head;
+		//move head to next passenger down
+		qPtr->head = qPtr->head->next;
+		//free the current head
+		free(currentHead);
+	}
+	free(qPtr);
+	
+	return SUCCESS;
+}
 //FOR TESTING PURPOSES
 /* A function (and global) that can trigger malloc fails on demand. */
 int mallocFail = 0;
