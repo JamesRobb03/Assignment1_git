@@ -320,4 +320,9 @@ int sortBoardingQueue(BoardingQueue *qPtr)
 {
 	(void)qPtr;
 	return NOT_IMPLEMENTED;
+
+	
+	//need a swap function to swap
+	//https://www.geeksforgeeks.org/c-program-for-bubble-sort/
+
 }
