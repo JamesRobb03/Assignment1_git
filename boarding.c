@@ -74,7 +74,16 @@ int createBoardingQueue(BoardingQueue **qPtr)
 /* Add a new Passenger to the END / tail of the boarding queue using the values provided */
 int addPassenger(BoardingQueue *qPtr, char name[], double passportNumber, int seatNumber)
 {
-	
+	//check to see if name is not greater than 30 characters long
+	if (name!=NULL)
+	{
+		int len;
+		len = strlen(name);
+		if (len>30)
+		{
+			return INVALID_INPUT_PARAMETER;
+		}
+	}
 	//checking to see if pointer is pointing to valid queue
 	if(qPtr == NULL)
 	{
@@ -90,7 +99,7 @@ int addPassenger(BoardingQueue *qPtr, char name[], double passportNumber, int se
 	}
 
 	//checks to see if inputs are valid
-	if (name == NULL || passportNumber <1 || seatNumber <1)
+	if (name == NULL || passportNumber < 1 || passportNumber > 88000 ||seatNumber < 1 || seatNumber > 150)
 	{
 		return INVALID_INPUT_PARAMETER;
 	}
@@ -121,13 +130,24 @@ int addPassenger(BoardingQueue *qPtr, char name[], double passportNumber, int se
 
 int addPriorityPassenger(BoardingQueue *qPtr, char name[], double passportNumber, int seatNumber)
 {
+	//check to see if name is not greater than 30 characters long
+	if (name!=NULL)
+	{
+		int len;
+		len = strlen(name);
+		if (len>30)
+		{
+			return INVALID_INPUT_PARAMETER;
+		}
+	}
+
 	//checking to see if pointer is pointing to valid queue
 	if (qPtr == NULL)
 	{
 		return INVALID_INPUT_PARAMETER;
 	}
 
-	if (name == NULL || passportNumber <1 || seatNumber <1)
+	if (name == NULL || passportNumber < 1 || passportNumber > 88000 ||seatNumber < 1 || seatNumber > 150)
 	{
 		return INVALID_INPUT_PARAMETER;
 	}
