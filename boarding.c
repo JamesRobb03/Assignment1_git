@@ -9,7 +9,7 @@
 #include <stdio.h>
 #include <string.h>
 
-//TODO - ADD INPUT VALIDATION FOR FIELDS.
+//TODO - Add more robust input checks. Add more commenting. Add the sort function.
 
 //Function to display queue. Used in testing when i wanted to see all passengers currently in the queue
 //Altered from the lab 3 answers.
@@ -154,7 +154,7 @@ int addPriorityPassenger(BoardingQueue *qPtr, char name[], double passportNumber
 		qPtr->head = newPriority;
 		qPtr->tail = newPriority;
 	}
-	
+
 	qPtr->head = newPriority;
 
 	return SUCCESS;
@@ -294,4 +294,10 @@ int clearBoardingQueue(BoardingQueue *qPtr)
 	free(qPtr);
 
 	return SUCCESS;
+}
+
+int sortBoardingQueue(BoardingQueue *qPtr)
+{
+	(void)qPtr;
+	return NOT_IMPLEMENTED
 }
