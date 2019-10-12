@@ -319,5 +319,5 @@ int clearBoardingQueue(BoardingQueue *qPtr)
 int sortBoardingQueue(BoardingQueue *qPtr)
 {
 	(void)qPtr;
-	return NOT_IMPLEMENTED
+	return NOT_IMPLEMENTED;
 }
