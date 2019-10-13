@@ -122,9 +122,6 @@ int addPassenger(BoardingQueue *qPtr, char name[], double passportNumber, int se
 		qPtr->tail = newPassenger;
 	}
 
-	//
-	
-
 	return SUCCESS;
 }
 
@@ -307,17 +304,69 @@ int clearBoardingQueue(BoardingQueue *qPtr)
 		currentHead->passportNumber=0;
 		strcpy(currentHead->name, "");
 
+		//Free's the passenger at the head of the queue
 		free(currentHead);
 	}
 
-
+	//free empty stack
 	free(qPtr);
 
 	return SUCCESS;
 }
 
+/*Function that sorts the boarding queue based on the seat number of the passenger*/
 int sortBoardingQueue(BoardingQueue *qPtr)
 {
-	(void)qPtr;
-	return NOT_IMPLEMENTED;
+	//initialising variables
+	int isSwapped; 
+	int i;
+	Passenger *tempPass;
+	Passenger *lastPassenger = NULL;
+
+	//check to see if queue is empty
+	if (qPtr == NULL)
+	{
+		return INVALID_INPUT_PARAMETER;
+	}
+
+	//do while loop which swaps the data from one passenger to another passenger if the seat number is 
+	//larger nearer the head of the queue.
+	do
+	{
+		//sets up variables 
+		isSwapped = 0;
+		tempPass = qPtr->head;
+
+		//while loops which loops through the queue 
+		while(tempPass->next != lastPassenger)
+		{
+			//if statement which checks if the currents passengers seat number is larger than the next passengers seat number
+			if (tempPass->seatNumber > tempPass->next->seatNumber)
+			{
+				//swaps values of one passenger to the other 
+				int temp = tempPass->seatNumber;
+				tempPass->seatNumber = tempPass->next->seatNumber;
+				tempPass->next->seatNumber = temp;
+
+				double temp2 = tempPass->passportNumber;
+				tempPass->passportNumber = tempPass->next->passportNumber;
+				tempPass->next->passportNumber = temp;
+
+				char temp3[30];
+				strcpy(temp3, tempPass->name);
+				strcpy(tempPass->name, tempPass->next->name);
+				strcpy(tempPass->next->name, temp3);
+
+				//sets the isSwapped value to break the loop
+				isSwapped = 1;
+			}
+			//sets tempPass to the next Passenger along
+			tempPass = tempPass->next;
+		}
+		//sets lastPassenger to tempPass
+		lastPassenger = tempPass;	
+	}while(isSwapped);
+
+	return SUCCESS;
 }
+
