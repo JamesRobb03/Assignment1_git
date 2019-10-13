@@ -3,13 +3,10 @@
  Matric number: 180010640
  Module code: AC21008
 */
-
 #include "boarding.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-
-//TODO - Add more robust input checks. Add more commenting. Add the sort function.
 
 //Function to display queue. Used in testing when i wanted to see all passengers currently in the queue
 //Altered from the lab 3 answers.
@@ -39,7 +36,7 @@ int displayQ(BoardingQueue *pQ)
 }
 
 
-/* Create a new, empty boarding queue, storing a pointer to it in the variable 
+/* Create a new, empty boarding queue, storing a pointer to it in the variable
    provided (e.g. qPtr) */
 int createBoardingQueue(BoardingQueue **qPtr)
 {
@@ -277,7 +274,7 @@ int peekAtTailPassenger(BoardingQueue *qPtr, Passenger *p)
 	p->seatNumber = qPtr->tail->seatNumber;
 	p->next = qPtr->tail->next;
 
-	return SUCCESS;	
+	return SUCCESS;
 }
 
 /* Empty the boarding queue, freeing up any memory that it is currently using */
@@ -314,11 +311,13 @@ int clearBoardingQueue(BoardingQueue *qPtr)
 	return SUCCESS;
 }
 
-/*Function that sorts the boarding queue based on the seat number of the passenger*/
+/*Function that sorts the boarding queue based on the seat number of the passenger
+used this site when researching how to implement bubble sort -
+https://www.geeksforgeeks.org/bubble-sort-on-doubly-linked-list */
 int sortBoardingQueue(BoardingQueue *qPtr)
 {
 	//initialising variables
-	int isSwapped; 
+	int isSwapped;
 	int i;
 	Passenger *tempPass;
 	Passenger *lastPassenger = NULL;
@@ -329,21 +328,21 @@ int sortBoardingQueue(BoardingQueue *qPtr)
 		return INVALID_INPUT_PARAMETER;
 	}
 
-	//do while loop which swaps the data from one passenger to another passenger if the seat number is 
+	//do while loop which swaps the data from one passenger to another passenger if the seat number is
 	//larger nearer the head of the queue.
 	do
 	{
-		//sets up variables 
+		//sets up variables
 		isSwapped = 0;
 		tempPass = qPtr->head;
 
-		//while loops which loops through the queue 
+		//while loops which loops through the queue
 		while(tempPass->next != lastPassenger)
 		{
 			//if statement which checks if the currents passengers seat number is larger than the next passengers seat number
 			if (tempPass->seatNumber > tempPass->next->seatNumber)
 			{
-				//swaps values of one passenger to the other 
+				//swaps values of one passenger to the other
 				int temp = tempPass->seatNumber;
 				tempPass->seatNumber = tempPass->next->seatNumber;
 				tempPass->next->seatNumber = temp;
@@ -364,9 +363,8 @@ int sortBoardingQueue(BoardingQueue *qPtr)
 			tempPass = tempPass->next;
 		}
 		//sets lastPassenger to tempPass
-		lastPassenger = tempPass;	
+		lastPassenger = tempPass;
 	}while(isSwapped);
 
 	return SUCCESS;
 }
-
