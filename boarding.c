@@ -8,34 +8,6 @@
 #include <stdio.h>
 #include <string.h>
 
-//Function to display queue. Used in testing when i wanted to see all passengers currently in the queue
-//Altered from the lab 3 answers.
-int displayQ(BoardingQueue *pQ)
-{
-	// if there is no stack to traverse
-	if (pQ == NULL)
-		return INVALID_INPUT_PARAMETER;
-
-	// if the stack is empty
-	if (pQ->head == NULL)
-		return INVALID_QUEUE_OPERATION;
-
-	// traverse the entire Stack, from top to bottom
-	Passenger *nextNodeToDisplay = pQ->head;
-	while (nextNodeToDisplay != NULL)
-	{
-		// display node
-		printf("Next passenger in Queue: %s\n", nextNodeToDisplay->name);
-
-		// move to next node down the stack
-		nextNodeToDisplay = nextNodeToDisplay->next;
-	}
-
-	// done
-	return SUCCESS;
-}
-
-
 /* Create a new, empty boarding queue, storing a pointer to it in the variable
    provided (e.g. qPtr) */
 int createBoardingQueue(BoardingQueue **qPtr)
